@@ -1,0 +1,7 @@
+{
+  "name": "sreerosh-client-gallery-deploy",
+  "private": true,
+  "dependencies": {
+    "googleapis": "^150.0.1"
+  }
+}
