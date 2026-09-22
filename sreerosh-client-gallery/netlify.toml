@@ -1,0 +1,7 @@
+[build]
+  command = "rm -rf .deploy && mkdir -p .deploy && unzip -q gallery-mvp.zip -d .deploy"
+  publish = ".deploy/sreerosh-client-gallery/public"
+  functions = ".deploy/sreerosh-client-gallery/netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
