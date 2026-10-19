@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
-import { Menu, X, Youtube, Instagram, Mouse } from "lucide-react";
+import { Menu, X, Youtube, Instagram } from "lucide-react";
 import { useState, useEffect } from "react";
+import MouseHouseLogo from "./MouseHouseLogo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function Navbar() {
     { name: "Home", href: "#home" },
     { name: "About", href: "#about" },
     { name: "Services", href: "#services" },
-    { name: "Portfolio", href: "#portfolio" },
+    { name: "Our Works", href: "#works" },
     { name: "Workflow", href: "#workflow" },
     { name: "Contact", href: "#contact" },
   ];
@@ -33,17 +34,20 @@ export default function Navbar() {
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-4"
         >
-          <img 
-            src="/logo.png" 
-            alt="Mouse House VFX Logo" 
-            className="h-12 w-auto object-contain brightness-0 invert"
-            referrerPolicy="no-referrer"
-          />
-          <span className="font-display font-bold text-xl tracking-tighter hidden sm:inline-block">
-            MOUSE HOUSE <span className="text-neon-blue">VFX</span>
-          </span>
+          <a href="#home" className="flex items-center gap-3 group">
+            <div className="p-1.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-neon-blue/50 group-hover:shadow-[0_0_20px_rgba(0,210,255,0.25)] transition-all">
+              <MouseHouseLogo size={36} showText={false} variant="white" />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-display font-black text-lg tracking-tight text-white group-hover:text-neon-blue transition-colors">
+                MOUSE HOUSE <span className="text-neon-blue">VFX</span>
+              </span>
+              <span className="text-[10px] uppercase font-mono tracking-widest text-gray-400">
+                Visual Effects Studio
+              </span>
+            </div>
+          </a>
         </motion.div>
 
         {/* Desktop Nav */}

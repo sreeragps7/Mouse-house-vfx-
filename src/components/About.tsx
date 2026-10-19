@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import MouseHouseLogo from "./MouseHouseLogo";
 
 export default function About() {
   return (
@@ -44,12 +45,13 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="aspect-square rounded-3xl overflow-hidden border border-white/10 neon-glow-purple">
-              <img
-                src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000"
-                alt="VFX Studio Setup"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
+            <div className="aspect-square rounded-3xl overflow-hidden border border-white/10 bg-[#121318] p-8 md:p-12 flex flex-col items-center justify-center neon-glow-purple group hover:border-neon-blue/50 transition-all">
+              <MouseHouseLogo
+                size="100%"
+                showText={true}
+                withBackground={false}
+                variant="white"
+                className="w-full max-w-[320px] drop-shadow-[0_0_30px_rgba(255,255,255,0.15)] group-hover:scale-105 transition-transform duration-500"
               />
             </div>
             {/* Decorative elements */}

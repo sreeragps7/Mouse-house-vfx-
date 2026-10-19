@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { ArrowRight } from "lucide-react";
+import MouseHouseLogo from "./MouseHouseLogo";
 
 export default function Hero() {
   return (
@@ -22,6 +23,19 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center justify-center mb-6"
+          >
+            <div className="p-3 rounded-2xl bg-white/5 border border-white/15 backdrop-blur-md shadow-[0_0_35px_rgba(0,210,255,0.25)] hover:border-neon-blue/60 transition-all">
+              <MouseHouseLogo size={60} showText={false} variant="white" />
+            </div>
+          </motion.div>
+
+          <br />
+
           <span className="inline-block px-4 py-1.5 rounded-full bg-neon-blue/10 border border-neon-blue/20 text-neon-blue text-xs font-mono mb-6 tracking-widest uppercase">
             Professional Studio
           </span>
@@ -36,21 +50,25 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-neon-blue text-vfx-dark font-bold rounded-full flex items-center gap-2 neon-glow-blue transition-all"
-            >
-              Get Started
-              <ArrowRight size={20} />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-bold rounded-full flex items-center gap-2 backdrop-blur-sm transition-all"
-            >
-              Hire Us
-            </motion.button>
+            <a href="#works">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-neon-blue text-vfx-dark font-bold rounded-full flex items-center gap-2 neon-glow-blue transition-all"
+              >
+                Explore Works
+                <ArrowRight size={20} />
+              </motion.button>
+            </a>
+            <a href="#contact">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 text-white font-bold rounded-full flex items-center gap-2 backdrop-blur-sm transition-all"
+              >
+                Hire Us
+              </motion.button>
+            </a>
           </div>
         </motion.div>
       </div>

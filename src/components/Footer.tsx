@@ -1,7 +1,10 @@
-import { Instagram, Youtube, Twitter, Linkedin, Mouse } from "lucide-react";
+import { Instagram, Youtube, Twitter, Linkedin, Lock, ShieldCheck } from "lucide-react";
+import MouseHouseLogo from "./MouseHouseLogo";
+import { useStudioAdmin } from "../context/AdminContext";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { isAdmin, openAuthModal } = useStudioAdmin();
 
   return (
     <footer className="py-12 border-t border-white/10">
@@ -9,15 +12,17 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-2">
             <div className="flex items-center gap-4 mb-6">
-              <img 
-                src="/logo.png" 
-                alt="Mouse House VFX Logo" 
-                className="h-10 w-auto object-contain brightness-0 invert"
-                referrerPolicy="no-referrer"
-              />
-              <span className="font-display font-bold text-xl tracking-tighter">
-                MOUSE HOUSE <span className="text-neon-blue">VFX</span>
-              </span>
+              <div className="p-2 rounded-2xl bg-white/5 border border-white/10">
+                <MouseHouseLogo size={52} showText={false} variant="white" />
+              </div>
+              <div>
+                <span className="font-display font-black text-2xl tracking-tighter text-white block">
+                  MOUSE HOUSE <span className="text-neon-blue">VFX</span>
+                </span>
+                <span className="text-xs uppercase font-mono tracking-widest text-gray-500">
+                  Visual Effects &amp; Compositing Studio
+                </span>
+              </div>
             </div>
             <p className="text-gray-500 max-w-sm leading-relaxed">
               Professional Visual Effects & Compositing Studio turning imagination into cinematic reality. 
@@ -30,7 +35,7 @@ export default function Footer() {
             <ul className="space-y-4 text-sm text-gray-500">
               <li><a href="#home" className="hover:text-neon-blue transition-colors">Home</a></li>
               <li><a href="#services" className="hover:text-neon-blue transition-colors">Services</a></li>
-              <li><a href="#portfolio" className="hover:text-neon-blue transition-colors">Portfolio</a></li>
+              <li><a href="#works" className="hover:text-neon-blue transition-colors">Our Works</a></li>
               <li><a href="#contact" className="hover:text-neon-blue transition-colors">Contact</a></li>
             </ul>
           </div>
@@ -58,9 +63,28 @@ export default function Footer() {
           <p className="text-sm text-gray-600">
             © {currentYear} Mouse House VFX. All rights reserved.
           </p>
-          <div className="flex gap-8 text-xs text-gray-600">
+          <div className="flex items-center gap-6 text-xs text-gray-600">
             <a href="#" className="hover:text-gray-400">Privacy Policy</a>
             <a href="#" className="hover:text-gray-400">Terms of Service</a>
+            {/* Discreet Studio Owner Login Button */}
+            <button
+              type="button"
+              onClick={openAuthModal}
+              className="inline-flex items-center gap-1.5 text-gray-600 hover:text-neon-blue transition-colors"
+              title="Studio Owner Access (Private)"
+            >
+              {isAdmin ? (
+                <>
+                  <ShieldCheck size={12} className="text-emerald-400" />
+                  <span className="text-emerald-400 font-medium">Studio Owner (Active)</span>
+                </>
+              ) : (
+                <>
+                  <Lock size={11} />
+                  <span>Studio Access</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>

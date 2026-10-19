@@ -7,21 +7,26 @@ import Workflow from "./components/Workflow";
 import Testimonials from "./components/Testimonials";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import { AdminProvider } from "./context/AdminContext";
+import AdminAuthModal from "./components/AdminAuthModal";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-vfx-dark selection:bg-neon-blue selection:text-vfx-dark">
-      <Navbar />
-      <main>
-        <Hero />
-        <About />
-        <Services />
-        <Portfolio />
-        <Workflow />
-        <Testimonials />
-        <Contact />
-      </main>
-      <Footer />
-    </div>
+    <AdminProvider>
+      <div className="min-h-screen bg-vfx-dark selection:bg-neon-blue selection:text-vfx-dark">
+        <Navbar />
+        <main>
+          <Hero />
+          <About />
+          <Services />
+          <Portfolio />
+          <Workflow />
+          <Testimonials />
+          <Contact />
+        </main>
+        <Footer />
+        <AdminAuthModal />
+      </div>
+    </AdminProvider>
   );
 }
