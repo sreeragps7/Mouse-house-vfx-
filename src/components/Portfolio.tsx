@@ -15,6 +15,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import paithalattamPoster from "../assets/images/paithalattam.jpg";
+import vennilavaiPoster from "../assets/images/vennilavai_vanthaale.jpg";
 import EditPosterModal, { resolveImageUrl } from "./EditPosterModal";
 import { useStudioAdmin } from "../context/AdminContext";
 import AdminFloatingBar from "./AdminFloatingBar";
@@ -54,20 +55,19 @@ export const DEFAULT_POSTERS: FilmPoster[] = [
   },
   {
     id: "shadows-calicut",
-    title: "vennilavai vanthale",
-    director: "Sreerosh",
+    title: "Vennilavai Vanthaale",
+    director: "Amal K Sivan",
     vfx: "Mouse House VFX",
-    tagline: "Dark Crime Neo-Noir Thriller",
+    tagline: "50K+ Views • Official Musical Film",
     description:
-      "Atmospheric crime thriller featuring complex rainy day CGI, digital blood simulations, and set extensions.",
-    image:
-      "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=900",
+      "Written and directed by Amal K Sivan with visual effects by Mouse House VFX. Music composed by Nikhil Babu.",
+    image: vennilavaiPoster,
     year: "2025",
-    badge: "Official Selection",
+    badge: "50K+ Views",
   },
 ];
 
-const STORAGE_KEY = "mousehouse_film_posters_v2";
+const STORAGE_KEY = "mousehouse_film_posters_v4";
 
 export default function Portfolio() {
   const { isAdmin } = useStudioAdmin();
@@ -331,7 +331,10 @@ export default function Portfolio() {
                 {/* Poster Caption / Footer Info below image */}
                 <div className="p-5 bg-vfx-card/90 border-t border-white/5 flex flex-col justify-between flex-1">
                   <div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-neon-blue transition-colors line-clamp-1">
+                    <h3
+                      style={{ borderColor: "#ffffff" }}
+                      className="text-lg font-bold text-white group-hover:text-neon-blue transition-colors line-clamp-1 border-white"
+                    >
                       {poster.title}
                     </h3>
                     <p className="text-xs text-gray-400 line-clamp-1 mt-1">
