@@ -41,7 +41,12 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 uppercase tracking-widest">Phone / WhatsApp</p>
-                  <p className="text-xl font-bold text-white">+91 9746427813</p>
+                  <a
+                    href="tel:+919745427813"
+                    className="text-xl font-bold text-white hover:text-neon-blue transition-colors block"
+                  >
+                    +91 9745427813
+                  </a>
                 </div>
               </div>
 

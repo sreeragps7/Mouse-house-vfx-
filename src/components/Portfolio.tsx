@@ -14,8 +14,6 @@ import {
   Check,
   ShieldCheck,
 } from "lucide-react";
-import paithalattamPoster from "../assets/images/paithalattam.jpg";
-import vennilavaiPoster from "../assets/images/vennilavai_vanthaale.jpg";
 import EditPosterModal, { resolveImageUrl } from "./EditPosterModal";
 import { useStudioAdmin } from "../context/AdminContext";
 import AdminFloatingBar from "./AdminFloatingBar";
@@ -48,8 +46,7 @@ export const DEFAULT_POSTERS: FilmPoster[] = [
     title: "Paithalattam (പൈതലോട്ടം)",
     director: "Sreerosh",
     vfx: "Mouse House VFX",
-
-    image: paithalattamPoster,
+    image: "/paithalattam.jpg",
     year: "2025",
     badge: "Winner • Best Film",
   },
@@ -61,13 +58,13 @@ export const DEFAULT_POSTERS: FilmPoster[] = [
     tagline: "50K+ Views • Official Musical Film",
     description:
       "Written and directed by Amal K Sivan with visual effects by Mouse House VFX. Music composed by Nikhil Babu.",
-    image: vennilavaiPoster,
+    image: "/vennilavai_vanthaale.jpg",
     year: "2025",
     badge: "50K+ Views",
   },
 ];
 
-const STORAGE_KEY = "mousehouse_film_posters_v4";
+const STORAGE_KEY = "mousehouse_film_posters_v5";
 
 export default function Portfolio() {
   const { isAdmin } = useStudioAdmin();
