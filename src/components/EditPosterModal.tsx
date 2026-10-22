@@ -105,7 +105,7 @@ export default function EditPosterModal({
   const [copiedSuccess, setCopiedSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Process file upload to base64
+  // Process file upload to base64 with canvas optimization for crisp quality and localStorage safety
   const handleFileUpload = (file: File) => {
     if (!file.type.startsWith("image/")) {
       alert("Please upload a valid image file (PNG, JPG, WebP, etc.)");
@@ -113,13 +113,48 @@ export default function EditPosterModal({
     }
     const reader = new FileReader();
     reader.onload = (e) => {
-      const result = e.target?.result as string;
-      if (result) {
-        setImageUrl(result);
+      const rawDataUrl = e.target?.result as string;
+      if (!rawDataUrl) return;
+
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const maxDim = 1600;
+          let width = img.width;
+          let height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimized = canvas.toDataURL(file.type === "image/png" ? "image/png" : "image/jpeg", 0.9);
+            setImageUrl(optimized);
+          } else {
+            setImageUrl(rawDataUrl);
+          }
+        } catch {
+          setImageUrl(rawDataUrl);
+        }
         setPreviewError(false);
-        setUrlNote("Image uploaded successfully from your device.");
+        setUrlNote("Photo uploaded successfully / പുതിയ ഫോട്ടോ വിജയകരമായി അപ്‌ലോഡ് ചെയ്തു!");
         setIsCanvaWarning(false);
-      }
+      };
+      img.onerror = () => {
+        setImageUrl(rawDataUrl);
+        setPreviewError(false);
+        setUrlNote("Photo uploaded successfully.");
+      };
+      img.src = rawDataUrl;
     };
     reader.readAsDataURL(file);
   };
@@ -252,13 +287,19 @@ export default function EditPosterModal({
             <div className="mb-5">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-neon-blue/10 border border-neon-blue/30 text-xs font-mono text-neon-blue mb-2">
                 <Sparkles size={12} />
-                <span>Customize Film Poster</span>
+                <span>
+                  {poster.id === "paithalattam" ? "Paithalattam Photo" : "Customize Film Poster"}
+                </span>
               </div>
               <h2 className="text-2xl font-black text-white tracking-tight">
-                Change Poster Artwork
+                {poster.id === "paithalattam"
+                  ? "Change Paithalattam (പൈതലോട്ടം) Photo"
+                  : "Change Poster Artwork"}
               </h2>
-              <p className="text-xs text-gray-400 mt-1">
-                Upload your new artwork, paste an image link, or adjust the film details.
+              <p className="text-xs text-gray-300 mt-1">
+                {poster.id === "paithalattam"
+                  ? "ഫോണിൽ നിന്നോ കമ്പ്യൂട്ടറിൽ നിന്നോ പുതിയ ഫോട്ടോ തിരഞ്ഞെടുക്കുക (Choose new photo from phone or PC)."
+                  : "Upload your new artwork, paste an image link, or adjust the film details."}
               </p>
             </div>
 
@@ -274,7 +315,7 @@ export default function EditPosterModal({
                 }`}
               >
                 <Upload size={14} />
-                <span>Upload File</span>
+                <span>Upload File / ഫോട്ടോ മാറ്റുക</span>
               </button>
 
               <button
@@ -300,7 +341,7 @@ export default function EditPosterModal({
                 }`}
               >
                 <Sliders size={14} />
-                <span>Poster Details</span>
+                <span>Details / വിവരങ്ങൾ</span>
               </button>
             </div>
 
@@ -318,7 +359,7 @@ export default function EditPosterModal({
                   className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all ${
                     isDragging
                       ? "border-neon-blue bg-neon-blue/10 scale-[1.01]"
-                      : "border-white/20 hover:border-neon-blue/50 bg-white/5 hover:bg-white/[0.07]"
+                      : "border-neon-blue/40 hover:border-neon-blue bg-white/5 hover:bg-white/[0.08]"
                   }`}
                 >
                   <input
@@ -336,17 +377,20 @@ export default function EditPosterModal({
                     <Upload size={22} />
                   </div>
                   <h4 className="text-sm font-bold text-white mb-1">
-                    Click to browse or drag &amp; drop artwork
+                    Click here to choose photo from your device
                   </h4>
-                  <p className="text-xs text-gray-400">
-                    Supports PNG, JPG, WebP (Ideal aspect ratio: 2:3 vertical)
+                  <p className="text-xs text-neon-blue font-medium mb-2">
+                    ഫോട്ടോ തിരഞ്ഞെടുക്കാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക (Browse Image)
+                  </p>
+                  <p className="text-[11px] text-gray-400">
+                    Supports JPG, PNG, WEBP (Supports phone camera photos &amp; high-res images)
                   </p>
                 </div>
 
                 <div className="flex items-start gap-2.5 p-3 rounded-xl bg-neon-blue/10 border border-neon-blue/20 text-xs text-gray-300">
                   <Info size={16} className="text-neon-blue shrink-0 mt-0.5" />
                   <span>
-                    Uploaded images are saved in your browser and will remain visible across page reloads.
+                    The photo is saved directly in your browser and will stay updated every time you open the site.
                   </span>
                 </div>
               </div>
@@ -549,12 +593,12 @@ export default function EditPosterModal({
                 {copiedSuccess ? (
                   <>
                     <Check size={14} />
-                    <span>Saved!</span>
+                    <span>Saved! / സേവ് ചെയ്തു!</span>
                   </>
                 ) : (
                   <>
                     <ImageIcon size={14} />
-                    <span>Apply &amp; Save</span>
+                    <span>Apply &amp; Save / സേവ് ചെയ്യുക</span>
                   </>
                 )}
               </button>

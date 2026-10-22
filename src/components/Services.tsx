@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Layers, Box, Scissors, Video, Target, Cpu } from "lucide-react";
+import { Layers, Box, Paintbrush, Music } from "lucide-react";
 
 const services = [
   {
@@ -15,27 +15,15 @@ const services = [
     color: "neon-purple",
   },
   {
-    title: "Green Screen Keying",
-    description: "High-end extraction and integration of subjects from green or blue screen backgrounds.",
-    icon: Scissors,
+    title: "Paint & Prep",
+    description: "Meticulous wire removal, plate cleanup, marker extraction, and clean plate creation ready for compositing.",
+    icon: Paintbrush,
     color: "neon-blue",
   },
   {
-    title: "Matchmoving",
-    description: "Precise camera tracking to ensure CGI elements perfectly match real-world movement.",
-    icon: Target,
-    color: "neon-purple",
-  },
-  {
-    title: "Rotoscoping & Cleanup",
-    description: "Meticulous frame-by-frame masking and removal of unwanted elements from footage.",
-    icon: Video,
-    color: "neon-blue",
-  },
-  {
-    title: "AI Cinematic Videos",
-    description: "Leveraging cutting-edge AI tools to generate high-quality cinematic content.",
-    icon: Cpu,
+    title: "Lyrical Videos",
+    description: "Stylized typography animations, dynamic motion graphics, and engaging visual storytelling synced to music tracks.",
+    icon: Music,
     color: "neon-purple",
   },
 ];
@@ -58,7 +46,7 @@ export default function Services() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => (
             <motion.div
               key={service.title}
@@ -69,7 +57,13 @@ export default function Services() {
               whileHover={{ y: -10 }}
               className="glass-card p-8 group hover:border-neon-blue/50 transition-all duration-300"
             >
-              <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-${service.color}/10 text-${service.color} group-hover:scale-110 transition-transform`}>
+              <div
+                className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 ${
+                  service.color === "neon-purple"
+                    ? "bg-neon-purple/10 text-neon-purple"
+                    : "bg-neon-blue/10 text-neon-blue"
+                } group-hover:scale-110 transition-transform`}
+              >
                 <service.icon size={28} />
               </div>
               <h3 className="text-xl font-bold mb-4 text-white">{service.title}</h3>

@@ -193,18 +193,6 @@ export default function Portfolio() {
               <Clapperboard size={13} />
               <span>Cinema &amp; Visual Effects</span>
             </div>
-
-            {/* Admin-only quick edit badge (Hidden from public) */}
-            {isAdmin && (
-              <button
-                onClick={() => setEditingPoster(posters[0])}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-neon-blue/20 hover:bg-neon-blue hover:text-vfx-dark border border-neon-blue/40 text-xs font-semibold text-neon-blue transition-all shadow-sm"
-                title="Studio Owner: Click to edit or replace poster artwork"
-              >
-                <ShieldCheck size={13} />
-                <span>Admin: Edit Posters</span>
-              </button>
-            )}
           </div>
 
           <motion.h2
@@ -257,21 +245,19 @@ export default function Portfolio() {
                     </span>
                   </div>
 
-                  {/* Admin-only 'Change' quick button in Top Right (Hidden from public) */}
-                  {isAdmin && (
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingPoster(poster);
-                      }}
-                      className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-md bg-black/85 hover:bg-neon-blue hover:text-vfx-dark text-neon-blue border border-neon-blue/40 text-[11px] font-semibold flex items-center gap-1.5 transition-all shadow-lg backdrop-blur-md"
-                      title="Studio Owner: Change this poster image"
-                    >
-                      <Camera size={12} />
-                      <span>Change</span>
-                    </button>
-                  )}
+                  {/* Small 'Change' quick button in Top Right */}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingPoster(poster);
+                    }}
+                    className="absolute top-2.5 right-2.5 z-20 px-2 py-0.5 rounded-full bg-black/70 hover:bg-neon-blue hover:text-vfx-dark text-gray-300 hover:border-neon-blue border border-white/15 text-[10px] font-medium flex items-center gap-1 transition-all shadow-sm backdrop-blur-sm opacity-70 group-hover:opacity-100"
+                    title="Change photo"
+                  >
+                    <Camera size={10} />
+                    <span>Change</span>
+                  </button>
 
                   {/* Shimmer / Gloss Light Reflection Overlay on Hover */}
                   <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -308,20 +294,21 @@ export default function Portfolio() {
                       </span>
                     </div>
 
-                    {/* Admin-only Change Poster Artwork on Hover (Hidden from public) */}
-                    {isAdmin && (
+                    {/* Discreet small Change option on Hover */}
+                    <div className="pt-2 flex items-center justify-end">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setEditingPoster(poster);
                         }}
-                        className="mt-3 w-full py-2 rounded-xl bg-neon-blue/20 hover:bg-neon-blue text-neon-blue hover:text-vfx-dark border border-neon-blue/40 text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-md"
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 hover:bg-neon-blue hover:text-vfx-dark text-gray-400 hover:text-vfx-dark border border-white/10 text-[10px] font-mono transition-all"
+                        title="Change photo"
                       >
-                        <Camera size={13} />
-                        <span>Change Poster Artwork</span>
+                        <Camera size={10} />
+                        <span>Change</span>
                       </button>
-                    )}
+                    </div>
                   </div>
                 </div>
 
@@ -349,27 +336,25 @@ export default function Portfolio() {
           })}
         </div>
 
-        {/* Admin-only Global Reset Option (Hidden from public) */}
-        {isAdmin && (
-          <div className="mt-12 text-center">
-            <button
-              type="button"
-              onClick={handleResetAll}
-              className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors underline-offset-4 hover:underline"
-            >
-              <RotateCcw size={12} />
-              <span>Reset all posters to original defaults</span>
-            </button>
-          </div>
-        )}
+        {/* Global Reset Option */}
+        <div className="mt-12 text-center">
+          <button
+            type="button"
+            onClick={handleResetAll}
+            className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors underline-offset-4 hover:underline"
+          >
+            <RotateCcw size={12} />
+            <span>Reset posters to original artwork</span>
+          </button>
+        </div>
       </div>
 
       {/* Floating Admin Status Bar for logged-in studio owner */}
       <AdminFloatingBar onOpenEditor={() => setEditingPoster(posters[0])} />
 
-      {/* EDIT POSTER MODAL (Studio Owner Only) */}
+      {/* EDIT POSTER MODAL */}
       <AnimatePresence>
-        {isAdmin && editingPoster && (
+        {editingPoster && (
           <EditPosterModal
             poster={editingPoster}
             defaultPoster={
@@ -481,21 +466,19 @@ export default function Portfolio() {
                 {/* Lightbox Action Buttons */}
                 <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    {/* Admin-only Change button inside lightbox */}
-                    {isAdmin && (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const current = selectedPoster;
-                          setSelectedPoster(null);
-                          setEditingPoster(current);
-                        }}
-                        className="px-4 py-2.5 rounded-xl bg-neon-blue/20 hover:bg-neon-blue hover:text-vfx-dark text-neon-blue border border-neon-blue/40 text-xs font-semibold flex items-center gap-1.5 transition-all"
-                      >
-                        <Camera size={14} />
-                        <span>Change Poster</span>
-                      </button>
-                    )}
+                    {/* Small Change button inside lightbox */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const current = selectedPoster;
+                        setSelectedPoster(null);
+                        setEditingPoster(current);
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-neon-blue hover:text-vfx-dark text-gray-300 border border-white/10 text-xs font-medium flex items-center gap-1.5 transition-all"
+                    >
+                      <Camera size={12} />
+                      <span>Change</span>
+                    </button>
 
                     <a
                       href={selectedPoster.image}
