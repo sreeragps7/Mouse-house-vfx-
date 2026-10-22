@@ -15,7 +15,7 @@ export default function Contact() {
       `Name: ${name}\nEmail: ${email}\n\nProject Description:\n${message}`
     );
 
-    window.location.href = `mailto:sreeragpsuresh9@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:mousehousevfxstudio@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -56,7 +56,12 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500 uppercase tracking-widest">Email</p>
-                  <p className="text-xl font-bold text-white">sreeragpsuresh9@gmail.com</p>
+                  <a
+                    href="mailto:mousehousevfxstudio@gmail.com"
+                    className="text-xl font-bold text-white hover:text-neon-purple transition-colors block break-all"
+                  >
+                    mousehousevfxstudio@gmail.com
+                  </a>
                 </div>
               </div>
 

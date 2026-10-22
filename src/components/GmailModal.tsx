@@ -44,7 +44,7 @@ export default function GmailModal() {
   const [selectedMessage, setSelectedMessage] = useState<GmailMessageSummary | null>(null);
 
   // Compose state
-  const [toAddress, setToAddress] = useState("sreeragpsuresh9@gmail.com");
+  const [toAddress, setToAddress] = useState("mousehousevfxstudio@gmail.com");
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [isSending, setIsSending] = useState(false);
