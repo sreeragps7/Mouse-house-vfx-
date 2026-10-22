@@ -278,6 +278,17 @@ export default function EditPosterModal({
           <p className="text-[11px] text-neon-purple text-center line-clamp-1">
             {tagline || (director ? `Dir. ${director}` : vfx)}
           </p>
+
+          {imageUrl !== poster.image && (
+            <button
+              type="button"
+              onClick={handleSave}
+              className="mt-3 w-full max-w-[240px] py-2 rounded-xl bg-neon-blue hover:bg-neon-blue/80 text-vfx-dark font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg transition-all animate-pulse"
+            >
+              <Check size={14} />
+              <span>Apply &amp; Save / സേവ് ചെയ്യുക</span>
+            </button>
+          )}
         </div>
 
         {/* Right Side: Configuration & Upload Options */}

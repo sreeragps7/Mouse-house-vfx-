@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Film,
   Sparkles,
@@ -44,27 +44,30 @@ export const DEFAULT_POSTERS: FilmPoster[] = [
   {
     id: "paithalattam",
     title: "Paithalattam (പൈതലോട്ടം)",
-    director: "Sreerosh",
+    director: "Vibin N Velayudhan",
     vfx: "Mouse House VFX",
+    tagline: "A Film by Vibin N Velayudhan • Official Selection",
+    description:
+      "Written and directed by Vibin N Velayudhan, produced by Sreejithlal & Adv M Navas. Official selection across Gangtok, Ahmedabad, Kodaikanal & Hong Kong Film Festivals with visual effects by Mouse House VFX.",
     image: "/paithalattam.jpg",
     year: "2025",
-    badge: "Winner • Best Film",
+    badge: "Official Selection",
   },
   {
     id: "shadows-calicut",
-    title: "Vennilavai Vanthaale",
+    title: "Vennilavaa! Vandhaale",
     director: "Amal K Sivan",
     vfx: "Mouse House VFX",
-    tagline: "50K+ Views • Official Musical Film",
+    tagline: "50K+ Views • Written & Directed by Amal K Sivan",
     description:
-      "Written and directed by Amal K Sivan with visual effects by Mouse House VFX. Music composed by Nikhil Babu.",
-    image: "/vennilavai_vanthaale.jpg",
+      "Chakku Official presents Vennilavaa! Vandhaale, written and directed by Amal K Sivan, produced by Jayanj K R & Amal K Sivan with music composed by Nikhil Babu and visual effects by Mouse House VFX.",
+    image: "/vennilavai_vanthaale.png",
     year: "2025",
     badge: "50K+ Views",
   },
 ];
 
-const STORAGE_KEY = "mousehouse_film_posters_v5";
+const STORAGE_KEY = "mousehouse_film_posters_v7";
 
 export default function Portfolio() {
   const { isAdmin } = useStudioAdmin();
@@ -109,6 +112,79 @@ export default function Portfolio() {
     setTimeout(() => {
       setToastMessage(null);
     }, 4000);
+  };
+
+  const savePosterImage = (posterId: string, imageSrc: string) => {
+    const newPosters = posters.map((p) => (p.id === posterId ? { ...p, image: imageSrc } : p));
+    setPosters(newPosters);
+
+    try {
+      const overrides: Record<string, Partial<FilmPoster>> = {};
+      newPosters.forEach((p) => {
+        const def = DEFAULT_POSTERS.find((d) => d.id === p.id);
+        if (def && p.image !== def.image) {
+          overrides[p.id] = { ...p, image: p.image };
+        }
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides));
+    } catch (err) {
+      console.warn("Storage quota fallback:", err);
+    }
+
+    const target = newPosters.find((p) => p.id === posterId);
+    showToast(`"${target?.title || "Poster"}" photo updated / പുതിയ ഫോട്ടോ സേവ് ചെയ്തു!`);
+  };
+
+  const handleDirectUpload = (posterId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file (JPG, PNG, WebP).");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const rawData = event.target?.result as string;
+      if (!rawData) return;
+
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const maxDim = 1200;
+          let width = img.width;
+          let height = img.height;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimized = canvas.toDataURL("image/jpeg", 0.85);
+            savePosterImage(posterId, optimized);
+          } else {
+            savePosterImage(posterId, rawData);
+          }
+        } catch {
+          savePosterImage(posterId, rawData);
+        }
+      };
+      img.onerror = () => {
+        savePosterImage(posterId, rawData);
+      };
+      img.src = rawData;
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
   };
 
   const handleSavePoster = (updatedPoster: FilmPoster) => {
@@ -231,7 +307,7 @@ export default function Portfolio() {
                     alt={poster.title}
                     referrerPolicy="no-referrer"
                     onError={(e) => {
-                      if (defaultArtwork && e.currentTarget.src !== defaultArtwork.image) {
+                      if (defaultArtwork && !e.currentTarget.src.includes(defaultArtwork.image)) {
                         e.currentTarget.src = defaultArtwork.image;
                       }
                     }}
@@ -245,15 +321,24 @@ export default function Portfolio() {
                     </span>
                   </div>
 
-                  {/* Small 'Change' quick button in Top Right */}
+                  {/* Hidden file input for 1-click immediate photo change */}
+                  <input
+                    type="file"
+                    id={`file-input-${poster.id}`}
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleDirectUpload(poster.id, e)}
+                  />
+
+                  {/* Small 'Change' button in Top Right - directly triggers file picker */}
                   <button
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setEditingPoster(poster);
+                      document.getElementById(`file-input-${poster.id}`)?.click();
                     }}
-                    className="absolute top-2.5 right-2.5 z-20 px-2 py-0.5 rounded-full bg-black/70 hover:bg-neon-blue hover:text-vfx-dark text-gray-300 hover:border-neon-blue border border-white/15 text-[10px] font-medium flex items-center gap-1 transition-all shadow-sm backdrop-blur-sm opacity-70 group-hover:opacity-100"
-                    title="Change photo"
+                    className="absolute top-2.5 right-2.5 z-20 px-2 py-0.5 rounded-full bg-black/75 hover:bg-neon-blue hover:text-vfx-dark text-gray-200 hover:border-neon-blue border border-white/20 text-[10px] font-semibold flex items-center gap-1 transition-all shadow-md backdrop-blur-sm opacity-80 group-hover:opacity-100"
+                    title="Change photo / പുതിയ ഫോട്ടോ തിരഞ്ഞെടുക്കുക"
                   >
                     <Camera size={10} />
                     <span>Change</span>
@@ -294,19 +379,31 @@ export default function Portfolio() {
                       </span>
                     </div>
 
-                    {/* Discreet small Change option on Hover */}
-                    <div className="pt-2 flex items-center justify-end">
+                    {/* Discreet small Change options on Hover */}
+                    <div className="pt-2 flex items-center justify-between gap-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          document.getElementById(`file-input-${poster.id}`)?.click();
+                        }}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/10 hover:bg-neon-blue hover:text-vfx-dark text-gray-300 hover:text-vfx-dark border border-white/10 text-[10px] font-mono transition-all"
+                        title="Upload new image"
+                      >
+                        <Camera size={10} />
+                        <span>Upload photo</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
                           setEditingPoster(poster);
                         }}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/5 hover:bg-neon-blue hover:text-vfx-dark text-gray-400 hover:text-vfx-dark border border-white/10 text-[10px] font-mono transition-all"
-                        title="Change photo"
+                        className="inline-flex items-center gap-1 text-[10px] text-gray-400 hover:text-neon-blue transition-colors font-mono underline-offset-2 hover:underline"
+                        title="Advanced options (links & details)"
                       >
-                        <Camera size={10} />
-                        <span>Change</span>
+                        <span>More</span>
                       </button>
                     </div>
                   </div>
